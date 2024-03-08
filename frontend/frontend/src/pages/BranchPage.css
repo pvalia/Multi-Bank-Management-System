@@ -1,0 +1,85 @@
+.branch-page {
+    text-align: center;
+    font-family: 'Arial', sans-serif; /* Choose a font that suits your design */
+    background-color: #f7f7f7; /* Light background for the page */
+    color: #333; /* Dark text color for contrast */
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff; /* Primary button color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+button:hover {
+    background-color: #003d82; /* Darker shade on hover */
+}
+
+.branches {
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center the branch boxes */
+}
+
+.branch-info {
+    background-color: white; /* White background for the branch box */
+    border-radius: 10px; /* Rounded corners for the box */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Slight shadow for depth */
+    padding: 20px;
+    margin: 15px;
+    width: 300px; /* Fixed width, you can use percentage or max-width for responsiveness */
+    transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.branch-info:hover {
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15); /* Larger shadow on hover for a "lifted" effect */
+}
+
+.branch-info h2 {
+    color: #007bff; /* Use the primary button color for consistency */
+    font-size: 22px; /* Larger font size for the branch ID */
+}
+
+.branch-info h3 {
+    font-size: 18px; /* Slightly larger font size for the employees label */
+    margin-top: 10px; /* Spacing above the employees label */
+}
+
+.branch-info p {
+    font-size: 16px; /* Standard font size for paragraph text */
+    line-height: 1.5; /* Line height for better readability */
+}
+
+.branch-info ul {
+    list-style-type: none; /* No bullet points */
+    padding-left: 0; /* Align text to the left */
+}
+
+.branch-info ul li {
+    background-color: #e7e7e7; /* Slightly different background for each list item */
+    border-radius: 5px; /* Rounded corners for list items */
+    padding: 5px 10px; /* Padding inside list items */
+    margin-bottom: 5px; /* Spacing between list items */
+}
+
+button.edit-button {
+    background-color: #f0ad4e; /* A different color to distinguish from other buttons */
+    border-color: #eea236;
+    margin-top: 10px; /* Spacing above the edit button */
+}
+
+button.edit-button:hover {
+    background-color: #ec971f;
+    border-color: #d58512;
+}

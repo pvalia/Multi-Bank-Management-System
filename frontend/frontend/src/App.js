@@ -1,32 +1,20 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import HomePage from './pages/HomePage';
+import BranchPage from './pages/BranchPage';
 import EmployeeForm from './pages/EmployeeForm';
 import BranchForm from './pages/BranchForm';
+import EditBranch from './pages/EditBranch';
 
 function App() {
   return (
     <Router>
       <div>
-        {/* Navigation Links Example (optional) */}
-        <nav>
-          <ul>
-            <li>
-              <a href="/">Home</a>
-            </li>
-            <li>
-              <a href="/create-employee">Create Employee</a>
-            </li>
-            <li>
-              <a href="/create-branch">Create Branch</a>
-            </li>
-          </ul>
-        </nav>
         {/* Routes Setup */}
         <Routes>
-          <Route path="/" exact component={HomePage} />
-          <Route path="/create-employee" component={EmployeeForm} />
-          <Route path="/create-branch" component={BranchForm} />
+          <Route path="/" element={<BranchPage />} />
+          <Route path="/create-employee" element={<EmployeeForm />} />
+          <Route path="/create-branch" element={<BranchForm />} />
+          <Route path="/edit-branch/:branchId" element={<EditBranch/>} />
         </Routes>
       </div>
     </Router>
