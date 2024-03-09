@@ -1,0 +1,100 @@
+/* EmployeeForm.css */
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    background-color: #e9ecef; /* A soft background color */
+    color: #495057; /* A color for text that is not too harsh */
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Use at least the full screen height to center vertically */
+    padding: 2rem;
+  }
+  
+  .form-container {
+    width: 100%;
+    max-width: 500px; /* Scaled up for a wider form */
+    background: #fff;
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1); /* A subtle border */
+  }
+  
+  .form-title {
+    font-size: 2.5rem; /* Larger font size */
+    margin-bottom: 2rem;
+    color: #5d647b;
+    font-weight: 600;
+  }
+  
+  .form-group {
+    margin-bottom: 2rem;
+    text-align: left;
+  }
+  
+  label {
+    font-size: 1.1rem;
+    color: #6c757d; /* A softer color for the label */
+    margin-bottom: 0.75rem;
+  }
+  
+  input[type="text"],
+  input[type="date"],
+  input[type="time"],
+  input[type="submit"] {
+    width: 100%;
+    padding: 15px 20px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Include padding and border */
+  }
+  
+  input[type="text"]:focus,
+  input[type="date"]:focus,
+  input[type="time"]:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+  }
+  
+  input[type="submit"] {
+    font-size: 1rem; /* Adjust the font size as needed */
+    color: #ffffff;
+    background-color: #007BFF; /* Brighter blue color */
+    border: none;
+    border-radius: 25px; /* More rounded corners */
+    padding: 16px 0; /* Larger padding for height, 0 for full width */
+    margin-top: 10px; /* Add a little space above the submit button */
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease; /* Smooth transition for color and shadow */
+    box-shadow: none; /* No shadow by default */
+    width: 100%; /* Full width */
+  }
+  
+  input[type="submit"]:hover,
+  input[type="submit"]:focus {
+    background-color: #0056B3; /* Slightly darker shade on hover/focus */
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2); /* Reintroduce the shadow for a "lifted" effect */
+  }
+  
+  /* Enhancements for mobile responsiveness */
+  @media (max-width: 768px) {
+    .form-container {
+      width: 90%;
+      padding: 2rem; /* Slightly less padding on smaller screens */
+    }
+  
+    .form-title {
+      font-size: 2rem; /* Slightly smaller font size on smaller screens */
+    }
+  }
+  

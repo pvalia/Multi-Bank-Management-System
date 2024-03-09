@@ -1,0 +1,98 @@
+/* FormStyles.css */
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    background-color: #e9ecef; /* A soft background color */
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Use at least the full screen height to center vertically */
+    padding: 2rem;
+  }
+  
+  .form-container {
+    width: 100%;
+    max-width: 500px; /* Adjust based on preference */
+    background: #fff;
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1); /* A subtle border */
+  }
+  
+  .form-title {
+    font-size: 2.5rem; /* Larger font size */
+    margin-bottom: 2rem;
+    color: #5d647b;
+    font-weight: 600;
+  }
+  
+  .form-group {
+    margin-bottom: 2rem;
+    text-align: left;
+  }
+  
+  label {
+    font-size: 1.1rem;
+    color: #6c757d; /* A softer color for the label */
+    margin-bottom: 0.75rem;
+  }
+  
+  input[type="text"],
+  input[type="number"], /* Added input type number for average traffic */
+  input[type="date"],
+  input[type="time"],
+  input[type="submit"] {
+    width: 100%;
+    padding: 15px 20px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Include padding and border */
+  }
+  
+  input[type="text"]:focus,
+  input[type="number"]:focus, /* Added focus style for type number */
+  input[type="date"]:focus,
+  input[type="time"]:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+  }
+  
+  input[type="submit"] {
+    font-size: 1.1rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  input[type="submit"]:hover,
+  input[type="submit"]:focus {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+  
+  /* Enhancements for mobile responsiveness */
+  @media (max-width: 768px) {
+    .form-container {
+      width: 90%;
+      padding: 2rem; /* Slightly less padding on smaller screens */
+    }
+  
+    .form-title {
+      font-size: 2rem; /* Slightly smaller font size on smaller screens */
+    }
+  }
+  
