@@ -10,8 +10,9 @@ class BankBranch(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     address = Column(String, index=True)
-    avg_daily_withdrawal = Column(Float)
-    avg_daily_deposit = Column(Float)
+    avg_daily_traffic = Column(Integer)
+    avg_daily_withdrawal = Column(Integer)
+    avg_daily_deposit = Column(Integer)
     
     employees = relationship('Employee', back_populates='branch')
 
