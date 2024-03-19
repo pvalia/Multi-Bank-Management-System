@@ -9,6 +9,8 @@ const BranchForm = () => {
     averageTraffic: '',
     openTime: '',
     closeTime: '',
+    weeklyWithdrawals: '',
+    weeklyDeposits: ''
   });
 
   // Function to update state based on form input changes
@@ -54,8 +56,26 @@ const BranchForm = () => {
             <label htmlFor="averageTraffic">Average Traffic:</label>
             <input
               type="text"
-              name="averagetraffic"
+              name="averageTraffic"
               value={formData.averageTraffic}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="Weekly Withdrawals">Weekly Withdrawals:</label>
+            <input
+              type="text"
+              name="weeklyWithdrawals"
+              value={formData.weeklyWithdrawals}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="Weekly Deposits">Weekly Deposits:</label>
+            <input
+              type="text"
+              name="weeklyDeposits"
+              value={formData.weeklyDeposits}
               onChange={handleChange}
             />
           </div>
