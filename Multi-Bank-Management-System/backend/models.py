@@ -1,3 +1,4 @@
+from click import DateTime
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from .database import Base
@@ -15,6 +16,8 @@ class BankBranch(Base):
     avg_daily_deposit = Column(Integer)
     
     employees = relationship('Employee', back_populates='branch')
+    transactions = relationship('Transaction', back_populates='branch')
+
 
 class Employee(Base):
     __tablename__ = 'employees'
@@ -26,3 +29,14 @@ class Employee(Base):
     branch_id = Column(Integer, ForeignKey('bank_branches.id'))
     
     branch = relationship('BankBranch', back_populates='employees')
+
+class Transaction(Base):
+    __tablename__ = 'transactions'
+    
+    id = Column(Integer, primary_key=True, index=True)
+    branch_id = Column(Integer, ForeignKey('bank_branches.id'))
+    amount = Column(Float)
+    transaction_type = Column(String)  # 'deposit' or 'withdrawal'
+    date = Column(DateTime)
+    
+    branch = relationship('BankBranch', back_populates='transactions')

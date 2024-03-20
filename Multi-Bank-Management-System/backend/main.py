@@ -1,6 +1,8 @@
 # Run this file from Multi-Bank-Management-System folder with command uvicorn backend.main:app --reload
+from datetime import date
 from fastapi import FastAPI, HTTPException, Depends, status
 from sqlalchemy.orm import Session
+from sqlalchemy import func, and_
 from backend import models, schemas, database
 from .database import Base, engine
 
@@ -52,3 +54,37 @@ def update_branch(branch_id: int, branch_update: schemas.BankBranchUpdate, dbSes
     dbSession.commit()
     dbSession.refresh(db_branch)
     return db_branch
+
+@app.post("/transactions/", status_code=status.HTTP_201_CREATED)
+def create_transaction(transaction: schemas.TransactionCreate, dbSession: Session = Depends(get_db)):
+    db_transaction = models.Transaction(**transaction.dict())
+    dbSession.add(db_transaction)
+    dbSession.commit()
+    dbSession.refresh(db_transaction)
+    return db_transaction
+
+@app.get("/branches/{branch_id}/minimum_cash_requirement")
+def calculate_minimum_cash_requirement(branch_id: int, week_start: date, week_end: date, dbSession: Session = Depends(get_db)):
+    withdrawals = dbSession.query(func.sum(models.Transaction.amount)).filter(
+        and_(
+            models.Transaction.branch_id == branch_id,
+            models.Transaction.transaction_type == 'withdrawal',
+            models.Transaction.date >= week_start,
+            models.Transaction.date <= week_end
+        )
+    ).scalar() or 0
+
+    deposits = dbSession.query(func.sum(models.Transaction.amount)).filter(
+        and_(
+            models.Transaction.branch_id == branch_id,
+            models.Transaction.transaction_type == 'deposit',
+            models.Transaction.date >= week_start,
+            models.Transaction.date <= week_end
+        )
+    ).scalar() or 0
+
+    net_cash_outflow = withdrawals - deposits
+    buffer = net_cash_outflow * 0.25
+    minimum_cash_requirement = net_cash_outflow + buffer
+    
+    return {"minimum_cash_requirement": minimum_cash_requirement}

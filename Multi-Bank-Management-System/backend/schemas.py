@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
+from datetime import datetime
 
 class BankBranchUpdate(BaseModel):
     name: Optional[str] = None
@@ -20,3 +21,9 @@ class EmployeeCreate(BaseModel):
     email: str
     avg_daily_work_hours: int
     branch_id: int
+
+class TransactionCreate(BaseModel):
+    branch_id: int
+    amount: float
+    transaction_type: str  # 'deposit' or 'withdrawal'
+    date: datetime    
