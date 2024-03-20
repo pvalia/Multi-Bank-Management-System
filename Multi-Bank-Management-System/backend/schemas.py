@@ -8,7 +8,7 @@ class BankBranchUpdate(BaseModel):
     avg_daily_withdrawal: Optional[float] = None
     avg_daily_deposit: Optional[float] = None
 
-class BankBranchCreate(BaseModel):
+class BankBranch(BaseModel):
     name: str
     address: str
     avg_daily_traffic : int
@@ -19,4 +19,4 @@ class EmployeeCreate(BaseModel):
     name: str
     email: str
     avg_daily_work_hours: int
-    branch_id: int
+    branch_id: Optional[int] = None
