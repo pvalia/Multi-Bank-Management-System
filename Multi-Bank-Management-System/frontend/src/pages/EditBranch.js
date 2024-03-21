@@ -1,77 +1,97 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './EditBranch.css'; // Ensure this CSS file exists and is styled correctly
+import axios from 'axios';
+import './EditBranch.css';
 
-// Mock function to fetch branch details, replace with real data fetching in your app
-const fetchBranchDetails = (branchId) => {
-  // Simulate an API call to get branch details
-  return Promise.resolve({
-    id: branchId,
-    name: 'Branch ' + branchId, // Mock name based on branch ID
-    traffic: 200
-  });
-};
+const API_URL = 'http://localhost:8000'; // Adjust this if your API is on a different URL
 
 const EditBranchPage = () => {
   const { branchId } = useParams();
   const navigate = useNavigate();
-  const [branchName, setBranchName] = useState('');
-  const [traffic, setTraffic] = useState(0);
+  const [branch, setBranch] = useState({
+    name: '',
+    avg_daily_traffic: 0,
+    avg_daily_withdrawal: 0,
+    avg_daily_deposit: 0,
+  });
 
   useEffect(() => {
-    fetchBranchDetails(branchId).then(data => {
-      setBranchName(data.name);
-      setTraffic(data.traffic);
-    });
+    // Fetch branch details
+    axios.get(`${API_URL}/branches/${branchId}`)
+      .then(response => {
+        setBranch(response.data); // Ensure the response data matches the state structure
+      })
+      .catch(error => {
+        console.error('Failed to fetch branch details:', error);
+      });
   }, [branchId]);
 
-  const handleBranchNameChange = (e) => {
-    setBranchName(e.target.value);
-  };
-
-  const handleWithdrawls = (e) => {
-    setTraffic(e.target.value);
-  };
-
-  const handleDeposits = (e) => {
-    setTraffic(e.target.value);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    const newValue = e.target.type === 'number' ? Number(value) : value;
+    setBranch(prev => ({ ...prev, [name]: newValue }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would usually send the updated data to the server
-    console.log(`Branch ${branchId} updated with new name: ${branchName} and traffic: ${traffic}`);
-    navigate('/'); // Redirect to home page or branch list page
-  };
+    // First, send the updated data to the server to update the branch
+    axios.patch(`${API_URL}/branches/${branchId}`, branch)
+      .then(() => {
+        console.log('Branch updated successfully');
+        // After successfully updating the branch, assign employees
+        return axios.post(`${API_URL}/assign-employees/`);
+      })
+      .then(() => {
+        console.log('Employees assigned successfully');
+        // After assigning employees, navigate to the home page or branch list page
+        navigate('/');
+      })
+      .catch(error => {
+        console.error('Failed to update branch or assign employees:', error);
+      });
+};
 
   return (
     <div className="edit-branch-page">
-      <h1>Edit Branch</h1>
+      <h1>Edit Branch: {branchId}</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="branchName">Branch Name</label>
+        <label htmlFor="name">Branch Name</label>
         <input
           type="text"
-          id="branchName"
-          value={branchName}
-          onChange={handleBranchNameChange}
+          id="name"
+          name="name"
+          value={branch.name || ''} // Handle potential null/undefined values
+          onChange={handleChange}
         />
 
-        <label htmlFor="withdrawls">Total daily withdrawals</label>
+        {/* Updated input names to match the state and backend */}
+        <label htmlFor="avg_daily_traffic">Total daily traffic</label>
         <input
           type="number"
-          id="withdrawls"
-          value={traffic}
-          onChange={handleWithdrawls}
+          id="avg_daily_traffic"
+          name="avg_daily_traffic"
+          value={branch.avg_daily_traffic || 0}
+          onChange={handleChange}
         />
 
-        <label htmlFor="deposits">Total daily deposits</label>
+        <label htmlFor="avg_daily_withdrawal">Total daily withdrawals</label>
         <input
           type="number"
-          id="deposits"
-          value={traffic}
-          onChange={handleDeposits}
+          id="avg_daily_withdrawal"
+          name="avg_daily_withdrawal"
+          value={branch.avg_daily_withdrawal || 0}
+          onChange={handleChange}
         />
-        
+
+        <label htmlFor="avg_daily_deposit">Total daily deposits</label>
+        <input
+          type="number"
+          id="avg_daily_deposit"
+          name="avg_daily_deposit"
+          value={branch.avg_daily_deposit || 0}
+          onChange={handleChange}
+        />
+
         <button type="submit">Update Branch</button>
       </form>
     </div>
