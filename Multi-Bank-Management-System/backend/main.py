@@ -2,7 +2,9 @@
 from fastapi import FastAPI, HTTPException, Depends, status
 from sqlalchemy.orm import Session
 from backend import models, schemas, database
+from .models import Employee
 from .database import Base, engine
+from typing import List
 
 app = FastAPI()
 
@@ -21,10 +23,31 @@ def get_db():
     finally:
         dbSession.close()
 
+def load_balance_employees(db: Session, traffic_per_employee: int):
+    branches = db.query(models.BankBranch).all()
+    for branch in branches:
+        branch.unaccounted_traffic = branch.avg_daily_traffic 
+
+    unassigned_employees = db.query(models.Employee).filter(models.Employee.branch_id == None).all()
+
+    while unassigned_employees and any(branch.unaccounted_traffic > 0 for branch in branches):
+        branches.sort(key=lambda x: x.unaccounted_traffic, reverse=True)
+        current_branch = branches[0]
+        
+        if current_branch.unaccounted_traffic > 0:
+            employee = unassigned_employees.pop(0) 
+            employee.branch_id = current_branch.id
+            current_branch.unaccounted_traffic -= traffic_per_employee
+            db.add(employee)
+        else:
+            break 
+
+    db.commit()
+
 #Takes in a branch input which should follow schema BankBranchCreate
 #dbSession is a new database session to handle database operations
-@app.post("/branches/", response_model=schemas.BankBranchCreate, status_code=status.HTTP_201_CREATED)
-def create_branch(branch: schemas.BankBranchCreate, dbSession: Session = Depends(get_db)):
+@app.post("/create-branch/", response_model=schemas.BankBranch, status_code=status.HTTP_201_CREATED)
+def create_branch(branch: schemas.BankBranch, dbSession: Session = Depends(get_db)):
     db_branch = models.BankBranch(**branch.model_dump())
     dbSession.add(db_branch)
     dbSession.commit()
@@ -39,7 +62,7 @@ def create_employee(employee: schemas.EmployeeCreate, dbSession: Session = Depen
     dbSession.refresh(db_employee)
     return db_employee
 
-@app.patch("/branches/{branch_id}", response_model=schemas.BankBranchCreate)
+@app.patch("/branches/{branch_id}", response_model=schemas.BankBranch)
 def update_branch(branch_id: int, branch_update: schemas.BankBranchUpdate, dbSession: Session = Depends(get_db)):
     db_branch = dbSession.query(models.BankBranch).filter(models.BankBranch.id == branch_id).first()
     if db_branch is None:
@@ -52,3 +75,16 @@ def update_branch(branch_id: int, branch_update: schemas.BankBranchUpdate, dbSes
     dbSession.commit()
     dbSession.refresh(db_branch)
     return db_branch
+
+@app.get("/branches/", response_model=List[schemas.BankBranch])
+def read_branches(db: Session = Depends(get_db)):
+    return db.query(models.BankBranch).all()
+
+@app.post("/assign-employees/")
+def assign_employees(db: Session = Depends(get_db), traffic_per_employee: int = 100):
+    db.query(Employee).update({Employee.branch_id: None}, synchronize_session=False)
+    db.commit()
+
+    load_balance_employees(db, traffic_per_employee)
+
+    
