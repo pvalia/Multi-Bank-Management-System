@@ -5,19 +5,22 @@ import './BranchPage.css'; // Import the CSS for styling
 
 const BranchPage = () => {
     const navigate = useNavigate();
-    const [branches, setBranches] = useState([]); // State to store the branches
+    const [branches, setBranches] = useState([]); // Initialized with an empty array
 
-    // Function to fetch branches from the backend when the component mounts
     useEffect(() => {
         getBranches()
             .then(response => {
-                setBranches(response.data); // Set the branches state with the response data
+                setBranches(response.data); // Ensure the data is set here
+                console.log("Info from Backend:", response.data)
             })
             .catch(error => {
-                console.error('Error fetching branches:', error);
-                // Handle error state as needed
+                console.error('Failed to fetch branches:', error);
             });
-    }, []); // The empty array ensures this effect runs only once after initial render
+    }, []);
+
+    useEffect(() => {
+        console.log("Info from Backend Branch:", branches.name);
+      }, [branches]); 
 
     // Function to handle navigation to EmployeeForm
     const handleCreateEmployeeClick = () => {
@@ -52,13 +55,16 @@ const BranchPage = () => {
                         </ul>
                         <h3>Employees:</h3>
                         <ul>
-                            {branch.employees.map((employee, index) => (
-                                <li key={index}>{employee}</li>
-                            ))}
+                        {branch.employees.map((employee, index) => (
+                            <li key={index}>
+                            {employee.name}
+                            </li>
+                        ))}
                         </ul>
-                        <p>Minimum Cash Requirement: ${branch.minCashRequirement}</p>
-                        <p>Total daily withdrawals: ${branch.withdrawals}</p> {/* Fix typo: from withdrawls to withdrawals */}
-                        <p>Total daily deposits: ${branch.deposits}</p>
+                        { <p>Minimum Cash Requirement: "TEMP" </p> /* ${branch.minCashRequirement} */}
+                        <p>Average Weelky withdrawals: ${branch.avg_daily_withdrawal}</p> {/* Fix typo: from withdrawls to withdrawals */}
+                        <p>Average Weelky deposits: ${branch.avg_daily_deposit}</p>
+                        <p>Average Weelky traffic: {branch.avg_daily_traffic} people/day</p>
                         <button onClick={() => handleEditBranchClick(branch.id)}>Edit</button>
                     </div>
                 ))}

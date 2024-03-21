@@ -6,6 +6,7 @@ from .models import Employee
 from .database import Base, engine
 from typing import List
 from sqlalchemy.orm import joinedload
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
@@ -13,9 +14,16 @@ app = FastAPI()
 async def root():
     return {"message": "FastAPI Server Starting"}
 
-
 app = FastAPI()
 Base.metadata.create_all(bind=engine)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Adjust the port if your React app runs on a different one
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def get_db():
     dbSession = database.SessionLocal()
@@ -80,6 +88,13 @@ def update_branch(branch_id: int, branch_update: schemas.BankBranchUpdate, dbSes
 @app.get("/branches/", response_model=List[schemas.BankBranch])
 def read_branches(db: Session = Depends(get_db)):
         return db.query(models.BankBranch).options(joinedload(models.BankBranch.employees)).all()
+
+@app.get("/branches/{branch_id}", response_model=schemas.BankBranch)
+def read_branch(branch_id: int, db: Session = Depends(get_db)):
+    branch = db.query(models.BankBranch).options(joinedload(models.BankBranch.employees)).filter(models.BankBranch.id == branch_id).first()
+    if branch is None:
+        raise HTTPException(status_code=404, detail="Branch not found")
+    return branch
 
 @app.post("/assign-employees/")
 def assign_employees(db: Session = Depends(get_db), traffic_per_employee: int = 100):
