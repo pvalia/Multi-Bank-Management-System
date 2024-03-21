@@ -5,6 +5,7 @@ from backend import models, schemas, database
 from .models import Employee
 from .database import Base, engine
 from typing import List
+from sqlalchemy.orm import joinedload
 
 app = FastAPI()
 
@@ -54,8 +55,8 @@ def create_branch(branch: schemas.BankBranch, dbSession: Session = Depends(get_d
     dbSession.refresh(db_branch)
     return db_branch
 
-@app.post("/employees/", response_model=schemas.EmployeeCreate, status_code=status.HTTP_201_CREATED)
-def create_employee(employee: schemas.EmployeeCreate, dbSession: Session = Depends(get_db)):
+@app.post("/employees/", response_model=schemas.Employee, status_code=status.HTTP_201_CREATED)
+def create_employee(employee: schemas.Employee, dbSession: Session = Depends(get_db)):
     db_employee = models.Employee(**employee.model_dump())
     dbSession.add(db_employee)
     dbSession.commit()
@@ -78,7 +79,7 @@ def update_branch(branch_id: int, branch_update: schemas.BankBranchUpdate, dbSes
 
 @app.get("/branches/", response_model=List[schemas.BankBranch])
 def read_branches(db: Session = Depends(get_db)):
-    return db.query(models.BankBranch).all()
+        return db.query(models.BankBranch).options(joinedload(models.BankBranch.employees)).all()
 
 @app.post("/assign-employees/")
 def assign_employees(db: Session = Depends(get_db), traffic_per_employee: int = 100):
