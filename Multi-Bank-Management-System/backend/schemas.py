@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
+
 
 class BankBranchUpdate(BaseModel):
     name: Optional[str] = None
@@ -15,8 +16,15 @@ class BankBranch(BaseModel):
     avg_daily_withdrawal: int
     avg_daily_deposit: int
 
-class EmployeeCreate(BaseModel):
+class Employee(BaseModel):
     name: str
     email: str
     avg_daily_work_hours: int
     branch_id: Optional[int] = None
+
+class BankBranch(BankBranch):
+    id: int
+    employees: List[Employee] = []
+
+    class Config:
+        orm_mode = True
