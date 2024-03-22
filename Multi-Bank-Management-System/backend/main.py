@@ -87,7 +87,20 @@ def update_branch(branch_id: int, branch_update: schemas.BankBranchUpdate, dbSes
 
 @app.get("/branches/", response_model=List[schemas.BankBranch])
 def read_branches(db: Session = Depends(get_db)):
-        return db.query(models.BankBranch).options(joinedload(models.BankBranch.employees)).all()
+    branches = db.query(models.BankBranch).options(joinedload(models.BankBranch.employees)).all()
+    for branch in branches:
+        # Calculate net cash flow assuming weekly totals for withdrawals and deposits
+        net_cash_flow = branch.avg_daily_withdrawal - branch.avg_daily_deposit
+        buffer = net_cash_flow * 0.25  # 25% buffer
+        minimum_cash_requirement = net_cash_flow + buffer
+        
+        # Temporarily attach these values to the branch objects for the response
+        # Note: This assumes your schemas.BankBranch Pydantic model can accept these extra fields
+        branch.net_cash_flow = net_cash_flow
+        branch.buffer = buffer
+        branch.minimum_cash_requirement = minimum_cash_requirement
+    
+    return branches
 
 @app.get("/branches/{branch_id}", response_model=schemas.BankBranch)
 def read_branch(branch_id: int, db: Session = Depends(get_db)):
