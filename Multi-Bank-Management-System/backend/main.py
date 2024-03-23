@@ -90,7 +90,7 @@ def read_branches(db: Session = Depends(get_db)):
     branches = db.query(models.BankBranch).options(joinedload(models.BankBranch.employees)).all()
     for branch in branches:
         net_cash_flow = branch.avg_daily_withdrawal - branch.avg_daily_deposit
-        buffer = net_cash_flow * 0.25  # 25% buffer
+        buffer = net_cash_flow * 0.25  # Buffer
         minimum_cash_requirement = net_cash_flow + buffer
         
         branch.net_cash_flow = net_cash_flow
