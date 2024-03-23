@@ -15,6 +15,9 @@ class BankBranch(BaseModel):
     avg_daily_traffic : int
     avg_daily_withdrawal: int
     avg_daily_deposit: int
+    net_cash_flow: int = 0
+    buffer: float = 0.0
+    minimum_cash_requirement: float = 0.0
 
 class Employee(BaseModel):
     name: str
