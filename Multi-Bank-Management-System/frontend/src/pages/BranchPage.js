@@ -61,8 +61,8 @@ const BranchPage = () => {
                             </li>
                         ))}
                         </ul>
-                        { <p>Minimum Cash Requirement: "TEMP" </p> /* ${branch.minCashRequirement} */}
-                        <p>Average Weelky withdrawals: ${branch.avg_daily_withdrawal}</p> {/* Fix typo: from withdrawls to withdrawals */}
+                        { <p>Minimum Cash Requirement: ${branch.minimum_cash_requirement}</p> }
+                        <p>Average Weelky withdrawals: ${branch.avg_daily_withdrawal}</p>
                         <p>Average Weelky deposits: ${branch.avg_daily_deposit}</p>
                         <p>Average Weelky traffic: {branch.avg_daily_traffic} people/day</p>
                         <button onClick={() => handleEditBranchClick(branch.id)}>Edit</button>
