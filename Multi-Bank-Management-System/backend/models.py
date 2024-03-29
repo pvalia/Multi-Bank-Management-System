@@ -13,7 +13,7 @@ class BankBranch(Base):
     avg_daily_traffic = Column(Integer)
     avg_daily_withdrawal = Column(Integer)
     avg_daily_deposit = Column(Integer)
-    
+    minimum_cash_requirement = Column(Integer)
     employees = relationship('Employee', back_populates='branch')
 
 class Employee(Base):

@@ -7,8 +7,12 @@ from .database import Base, engine
 from typing import List
 from sqlalchemy.orm import joinedload
 from fastapi.middleware.cors import CORSMiddleware
+import logging
 
 app = FastAPI()
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 @app.get("/")
 async def root():
@@ -57,10 +61,29 @@ def load_balance_employees(db: Session, traffic_per_employee: int):
 #dbSession is a new database session to handle database operations
 @app.post("/create-branch/", response_model=schemas.BankBranch, status_code=status.HTTP_201_CREATED)
 def create_branch(branch: schemas.BankBranch, dbSession: Session = Depends(get_db)):
-    db_branch = models.BankBranch(**branch.model_dump())
+    # Convert Pydantic model to dictionary
+    branch_data = branch.dict()
+    logger.debug(f"Received branch data for creation: {branch_data}")
+    
+    # Calculate minimum_cash_requirement
+    net_cash_flow = branch.avg_daily_withdrawal - branch.avg_daily_deposit
+    buffer = net_cash_flow * 0.25  # Buffer
+    minimum_cash_requirement = net_cash_flow + buffer
+    
+    # Add the calculated minimum_cash_requirement to the branch data
+
+    branch_data['minimum_cash_requirement'] = minimum_cash_requirement
+    
+    # Create a new branch instance
+    db_branch = models.BankBranch(**branch_data)
+    
+    # Add the branch to the session and commit
     dbSession.add(db_branch)
     dbSession.commit()
+    
+    # Refresh the branch object to get the updated values from the database
     dbSession.refresh(db_branch)
+    
     return db_branch
 
 @app.post("/employees/", response_model=schemas.Employee, status_code=status.HTTP_201_CREATED)
