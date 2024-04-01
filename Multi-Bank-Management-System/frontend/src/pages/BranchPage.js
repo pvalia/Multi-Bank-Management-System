@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getBranches } from '../services/ApiService'; // Make sure this path is correct
-import './BranchPage.css'; // Import the CSS for styling
+import { getBranches, deleteBranch, assignEmployees} from '../services/ApiService'; 
+import './BranchPage.css'; 
+import axios from 'axios';
+
+const API_URL = 'http://localhost:8000'; 
 
 const BranchPage = () => {
     const navigate = useNavigate();
-    const [branches, setBranches] = useState([]); // Initialized with an empty array
+    const [branches, setBranches] = useState([]);
+    const handleRemoveBranchClick = async (branchId) => {
+        console.log("deleting branch id:", branchId)
+        try {
+            const message = await deleteBranch(branchId);
+            console.log(message);
+            assignEmployees();
+            window.location.reload();
+            console.log("Branch removed successfully");
+        } catch (error) {
+            console.error('Failed to delete branch:', error);
+        }
+    };
 
     useEffect(() => {
         getBranches()
             .then(response => {
-                setBranches(response.data); // Ensure the data is set here
+                setBranches(response.data); 
                 console.log("Info from Backend:", response.data)
             })
             .catch(error => {
@@ -22,12 +37,10 @@ const BranchPage = () => {
         console.log("Info from Backend Branch:", branches.name);
       }, [branches]); 
 
-    // Function to handle navigation to EmployeeForm
     const handleCreateEmployeeClick = () => {
         navigate('/create-employee');
     };
 
-    // Function to handle navigation to BranchForm
     const handleCreateBranchClick = () => {
         navigate('/create-branch');
     };
@@ -44,7 +57,6 @@ const BranchPage = () => {
                 <button onClick={handleCreateBranchClick}>Create Branch</button>
             </div>
 
-            {/* Branches Section */}
             <div className="branches">
                 {branches.map(branch => (
                     <div key={branch.id} className="branch-info">
@@ -65,7 +77,8 @@ const BranchPage = () => {
                         <p>Average Weelky withdrawals: ${branch.avg_daily_withdrawal}</p>
                         <p>Average Weelky deposits: ${branch.avg_daily_deposit}</p>
                         <p>Average Weelky traffic: {branch.avg_daily_traffic} people/day</p>
-                        <button onClick={() => handleEditBranchClick(branch.id)}>Edit</button>
+                        <button2 onClick={() => handleEditBranchClick(branch.id)}>Edit</button2>
+                        <button3 onClick={() => handleRemoveBranchClick(branch.id)}>Remove</button3>
                     </div>
                 ))}
             </div>

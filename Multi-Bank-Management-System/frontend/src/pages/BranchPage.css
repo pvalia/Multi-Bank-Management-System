@@ -1,8 +1,8 @@
 .branch-page {
     text-align: center;
-    font-family: 'Arial', sans-serif; /* Choose a font that suits your design */
-    background-color: #f7f7f7; /* Light background for the page */
-    color: #333; /* Dark text color for contrast */
+    font-family: 'Arial', sans-serif; 
+    background-color: #f7f7f7; 
+    color: #333; 
 }
 
 .buttons {
@@ -14,69 +14,98 @@ button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #007bff; /* Primary button color */
-    color: white; /* Text color */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    background-color: #007bff; 
+    color: white; 
+    border: none;
+    border-radius: 5px; 
+    transition: background-color 0.3s ease; 
+}
+
+button2 {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #14a12e;
+    color: white; 
+    border: none; 
+    border-radius: 5px;
+    transition: background-color 0.3s ease; 
+}
+
+button3 {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #bd1616; 
+    color: white;
+    border: none; 
+    border-radius: 5px; 
+    transition: background-color 0.3s ease; 
 }
 
 button:hover {
-    background-color: #003d82; /* Darker shade on hover */
+    background-color: #003d82; 
 }
-
+button2:hover {
+    background-color: #156c25; 
+}
+button3:hover {
+    background-color:  #911111; 
+}
 .branches {
     margin-top: 30px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Center the branch boxes */
+    justify-content: center; 
 }
 
 .branch-info {
-    background-color: white; /* White background for the branch box */
-    border-radius: 10px; /* Rounded corners for the box */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Slight shadow for depth */
+    background-color: white; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     padding: 20px;
     margin: 15px;
-    width: 300px; /* Fixed width, you can use percentage or max-width for responsiveness */
-    transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
+    width: 300px; 
+    transition: box-shadow 0.3s ease; 
 }
 
 .branch-info:hover {
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15); /* Larger shadow on hover for a "lifted" effect */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15); 
 }
 
 .branch-info h2 {
-    color: #007bff; /* Use the primary button color for consistency */
-    font-size: 22px; /* Larger font size for the branch ID */
+    color: #007bff; 
+    font-size: 22px;
 }
 
 .branch-info h3 {
-    font-size: 18px; /* Slightly larger font size for the employees label */
-    margin-top: 10px; /* Spacing above the employees label */
+    font-size: 18px; 
+    margin-top: 10px; 
 }
 
 .branch-info p {
-    font-size: 16px; /* Standard font size for paragraph text */
-    line-height: 1.5; /* Line height for better readability */
+    font-size: 16px; 
+    line-height: 1.5; 
 }
 
 .branch-info ul {
-    list-style-type: none; /* No bullet points */
-    padding-left: 0; /* Align text to the left */
+    list-style-type: none; 
+    padding-left: 0; 
 }
 
 .branch-info ul li {
-    background-color: #e7e7e7; /* Slightly different background for each list item */
-    border-radius: 5px; /* Rounded corners for list items */
-    padding: 5px 10px; /* Padding inside list items */
-    margin-bottom: 5px; /* Spacing between list items */
+    background-color: #e7e7e7; 
+    border-radius: 5px; 
+    padding: 5px 10px; 
+    margin-bottom: 5px; 
 }
 
 button.edit-button {
-    background-color: #f0ad4e; /* A different color to distinguish from other buttons */
+    background-color: #f0ad4e; 
     border-color: #eea236;
-    margin-top: 10px; /* Spacing above the edit button */
+    margin-top: 10px;
 }
 
 button.edit-button:hover {

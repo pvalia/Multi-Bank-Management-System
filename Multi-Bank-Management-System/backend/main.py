@@ -88,13 +88,9 @@ def create_employee(employee: schemas.Employee, dbSession: Session = Depends(get
 @app.patch("/branches/{branch_id}", response_model=schemas.BankBranch)
 def update_branch(branch_id: int, branch_update: schemas.BankBranchUpdate, dbSession: Session = Depends(get_db)):
     db_branch = dbSession.query(models.BankBranch).filter(models.BankBranch.id == branch_id).first()
-    if db_branch is None:
-        raise HTTPException(status_code=404, detail="Bank branch not found")
-
     update_data = branch_update.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(db_branch, key, value)
-
     dbSession.commit()
     dbSession.refresh(db_branch)
     return db_branch
@@ -110,7 +106,6 @@ def read_branches(db: Session = Depends(get_db)):
         branch.net_cash_flow = net_cash_flow
         branch.buffer = buffer
         branch.minimum_cash_requirement = minimum_cash_requirement
-    
     return branches
 
 @app.get("/branches/{branch_id}", response_model=schemas.BankBranch)
@@ -122,18 +117,17 @@ def read_branch(branch_id: int, db: Session = Depends(get_db)):
 def assign_employees(db: Session = Depends(get_db), traffic_per_employee: int = 100):
     db.query(Employee).update({Employee.branch_id: None}, synchronize_session=False)
     db.commit()
-
     load_balance_employees(db, traffic_per_employee)
 
 @app.delete("/employees/{employee_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_employee(employee_id: int, db: Session = Depends(database.get_db)):
+def delete_employee(employee_id: int, db: Session = Depends(get_db)):
     db_employee = db.query(models.Employee).filter(models.Employee.id == employee_id).first()
     db.delete(db_employee)
     db.commit()
     return {"message": "Employee deleted successfully"}
 
 @app.delete("/branches/{branch_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_branch(branch_id: int, db: Session = Depends(database.get_db)):
+def delete_branch(branch_id: int, db: Session = Depends(get_db)):
     db_branch = db.query(models.BankBranch).filter(models.BankBranch.id == branch_id).first()
     db.delete(db_branch)
     db.commit()
