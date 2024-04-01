@@ -91,10 +91,10 @@ const BranchPage = () => {
                             ))}
                         </ul>
                         { <p>Minimum Cash Requirement: ${branch.minimum_cash_requirement}</p> }
-                        <p>Average Weelky withdrawals: ${branch.avg_daily_withdrawal}</p>
-                        <p>Average Weelky deposits: ${branch.avg_daily_deposit}</p>
-                        <p>Average Weelky traffic: {branch.avg_daily_traffic} people/day</p>
-                        <button2 onClick={() => handleEditBranchClick(branch.id)}>Edit</button2>
+                        <p>Average Weekly Withdrawals: ${branch.avg_daily_withdrawal}</p>
+                        <p>Average Weekly Deposits: ${branch.avg_daily_deposit}</p>
+                        <p>Average Weekly Traffic: {branch.avg_daily_traffic} people/day</p>
+                        <button onClick={() => handleEditBranchClick(branch.id)}>Edit</button>
                         <button3 onClick={() => handleRemoveBranchClick(branch.id)}>Remove</button3>
                     </div>
                 ))}
