@@ -23,7 +23,7 @@ Base.metadata.create_all(bind=engine)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Adjust the port if your React app runs on a different one
+    allow_origins=["http://localhost:3000"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -61,27 +61,18 @@ def load_balance_employees(db: Session, traffic_per_employee: int):
 #dbSession is a new database session to handle database operations
 @app.post("/create-branch/", response_model=schemas.BankBranch, status_code=status.HTTP_201_CREATED)
 def create_branch(branch: schemas.BankBranch, dbSession: Session = Depends(get_db)):
-    # Convert Pydantic model to dictionary
     branch_data = branch.dict()
     logger.debug(f"Received branch data for creation: {branch_data}")
     
-    # Calculate minimum_cash_requirement
     net_cash_flow = branch.avg_daily_withdrawal - branch.avg_daily_deposit
-    buffer = net_cash_flow * 0.25  # Buffer
+    buffer = net_cash_flow * 0.25  
     minimum_cash_requirement = net_cash_flow + buffer
     
-    # Add the calculated minimum_cash_requirement to the branch data
-
     branch_data['minimum_cash_requirement'] = minimum_cash_requirement
-    
-    # Create a new branch instance
+
     db_branch = models.BankBranch(**branch_data)
-    
-    # Add the branch to the session and commit
     dbSession.add(db_branch)
     dbSession.commit()
-    
-    # Refresh the branch object to get the updated values from the database
     dbSession.refresh(db_branch)
     
     return db_branch
@@ -113,7 +104,7 @@ def read_branches(db: Session = Depends(get_db)):
     branches = db.query(models.BankBranch).options(joinedload(models.BankBranch.employees)).all()
     for branch in branches:
         net_cash_flow = branch.avg_daily_withdrawal - branch.avg_daily_deposit
-        buffer = net_cash_flow * 0.25  # Buffer
+        buffer = net_cash_flow * 0.25 
         minimum_cash_requirement = net_cash_flow + buffer
         
         branch.net_cash_flow = net_cash_flow
@@ -125,8 +116,6 @@ def read_branches(db: Session = Depends(get_db)):
 @app.get("/branches/{branch_id}", response_model=schemas.BankBranch)
 def read_branch(branch_id: int, db: Session = Depends(get_db)):
     branch = db.query(models.BankBranch).options(joinedload(models.BankBranch.employees)).filter(models.BankBranch.id == branch_id).first()
-    if branch is None:
-        raise HTTPException(status_code=404, detail="Branch not found")
     return branch
 
 @app.post("/assign-employees/")
@@ -136,4 +125,16 @@ def assign_employees(db: Session = Depends(get_db), traffic_per_employee: int = 
 
     load_balance_employees(db, traffic_per_employee)
 
-    
+@app.delete("/employees/{employee_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_employee(employee_id: int, db: Session = Depends(database.get_db)):
+    db_employee = db.query(models.Employee).filter(models.Employee.id == employee_id).first()
+    db.delete(db_employee)
+    db.commit()
+    return {"message": "Employee deleted successfully"}
+
+@app.delete("/branches/{branch_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_branch(branch_id: int, db: Session = Depends(database.get_db)):
+    db_branch = db.query(models.BankBranch).filter(models.BankBranch.id == branch_id).first()
+    db.delete(db_branch)
+    db.commit()
+    return {"message": "Branch deleted successfully"}
