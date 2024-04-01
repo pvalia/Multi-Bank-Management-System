@@ -112,3 +112,46 @@ button.edit-button:hover {
     background-color: #ec971f;
     border-color: #d58512;
 }
+
+.branch-info ul.employees-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.branch-info ul.employees-list li {
+    background-color: #e7e7e7;
+    border-radius: 5px; 
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 10px;
+    position: relative; 
+    height: auto;
+}
+
+.branch-info ul.employees-list li .employee-name {
+    flex-grow: 1; 
+    text-align: center; 
+}
+
+.branch-info ul.employees-list li .deleteButton {
+    position: absolute;
+    right: 10px;
+    top: 30%;
+    transform: translateY(-50%); 
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.branch-info ul.employees-list li .deleteButton img {
+    width: 20px;
+    height: 20px;
+}
+
+.branch-info ul.employees-list li .deleteButton:hover img {
+    transform: scale(1.2); 
+    transition: transform 0.3s ease, background-color 0.3s ease; 
+  }

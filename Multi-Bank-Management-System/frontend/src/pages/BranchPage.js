@@ -21,6 +21,20 @@ const BranchPage = () => {
             console.error('Failed to delete branch:', error);
         }
     };
+    const handleEmployeeDelete = (employee_Id) => {
+        axios.delete(`${API_URL}/employees/${employee_Id}`, employee_Id)
+          .then(() => {
+            console.log('Employee deleted successfully');
+            return axios.post(`${API_URL}/assign-employees/`);
+          })
+          .then(() => {
+            console.log('Employees assigned successfully');
+            window.location.reload();
+          })
+          .catch(error => {
+            console.error('Failed to delete or re-assign employees:', error);
+          });
+    };
 
     useEffect(() => {
         getBranches()
@@ -66,12 +80,15 @@ const BranchPage = () => {
                             <li>{branch.name}</li>
                         </ul>
                         <h3>Employees:</h3>
-                        <ul>
-                        {branch.employees.map((employee, index) => (
-                            <li key={index}>
-                            {employee.name}
-                            </li>
-                        ))}
+                        <ul className="employees-list">
+                            {branch.employees.map((employee, index) => (
+                                <li key={index}>
+                                <div className="employee-name">{employee.name}</div>
+                                <button onClick={() => handleEmployeeDelete(employee.id)} className="deleteButton">
+                                    <img src="/trash.svg" alt="Delete" />
+                                </button>
+                                </li>
+                            ))}
                         </ul>
                         { <p>Minimum Cash Requirement: ${branch.minimum_cash_requirement}</p> }
                         <p>Average Weelky withdrawals: ${branch.avg_daily_withdrawal}</p>
