@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './EditBranch.css';
 
-const API_URL = 'http://localhost:8000'; // Adjust this if your API is on a different URL
+const API_URL = 'http://localhost:8000'; 
 
 const EditBranchPage = () => {
   const { branchId } = useParams();
@@ -16,10 +16,9 @@ const EditBranchPage = () => {
   });
 
   useEffect(() => {
-    // Fetch branch details
     axios.get(`${API_URL}/branches/${branchId}`)
       .then(response => {
-        setBranch(response.data); // Ensure the response data matches the state structure
+        setBranch(response.data); 
       })
       .catch(error => {
         console.error('Failed to fetch branch details:', error);
@@ -34,16 +33,13 @@ const EditBranchPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // First, send the updated data to the server to update the branch
     axios.patch(`${API_URL}/branches/${branchId}`, branch)
       .then(() => {
         console.log('Branch updated successfully');
-        // After successfully updating the branch, assign employees
         return axios.post(`${API_URL}/assign-employees/`);
       })
       .then(() => {
         console.log('Employees assigned successfully');
-        // After assigning employees, navigate to the home page or branch list page
         navigate('/');
       })
       .catch(error => {
@@ -60,11 +56,10 @@ const EditBranchPage = () => {
           type="text"
           id="name"
           name="name"
-          value={branch.name || ''} // Handle potential null/undefined values
+          value={branch.name || ''} 
           onChange={handleChange}
         />
-
-        {/* Updated input names to match the state and backend */}
+        
         <label htmlFor="avg_daily_traffic">Total daily traffic</label>
         <input
           type="number"
