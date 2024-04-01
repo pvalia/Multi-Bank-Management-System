@@ -20,6 +20,7 @@ class BankBranch(BaseModel):
     minimum_cash_requirement: Optional[float] = 0.0
 
 class Employee(BaseModel):
+    id: Optional[int] = None
     name: str
     email: str
     avg_daily_work_hours: int
