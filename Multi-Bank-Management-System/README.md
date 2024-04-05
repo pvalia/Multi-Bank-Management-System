@@ -7,3 +7,6 @@ pip install -r requirements.txt
 
 ### To run backend
 Run command uvicorn backend.main:app --reload from Multi-Bank-Management-System folder   
+
+## To run frontend
+Run command npm start from frontend folder   

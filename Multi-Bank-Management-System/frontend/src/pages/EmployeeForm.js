@@ -6,7 +6,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 const API_URL = 'http://localhost:8000';
 
 const EmployeeForm = () => {
-  // Initialize form state with useState hook
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -14,29 +13,24 @@ const EmployeeForm = () => {
   });
   const navigate = useNavigate();
 
-  // Function to update state based on form input changes
   const handleChange = (e) => {
-    const { name, value } = e.target; // Destructure name and value from event target
+    const { name, value } = e.target; 
     setFormData({
-      ...formData, // Spread current formData
-      [name]: value, // Update changed value
+      ...formData,
+      [name]: value, 
     });
   };
 
-  // Function to handle form submission
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
 
-    // Ensure avg_daily_work_hours is converted to a number
     const dataWithCorrectTypes = {
       ...formData,
       avg_daily_work_hours: Number(formData.avg_daily_work_hours),
     };
 
-    // Print data being sent
     console.log('Creating employee with data:', dataWithCorrectTypes);
 
-    // Make HTTP POST request to create employee
     axios.post(`${API_URL}/employees/`, dataWithCorrectTypes)
     .then(response => {
       console.log('Employee created successfully:', response.data);
@@ -55,7 +49,6 @@ const EmployeeForm = () => {
 };
   
 
-  // JSX to render the form
   return (
     <div className="container">
     <div className="form-container">

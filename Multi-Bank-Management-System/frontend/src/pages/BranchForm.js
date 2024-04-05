@@ -16,14 +16,12 @@ const BranchForm = () => {
   });
   const navigate = useNavigate();
 
-  // Function to update state based on form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     const parsedValue = name.includes('avg_daily_') ? parseInt(value, 10) || 0 : value;
     setFormData({ ...formData, [name]: parsedValue });
   };
   
-  // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Submitting the following data:', formData); 
